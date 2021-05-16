@@ -167,10 +167,12 @@ def data_profanities(url):
             tags = str(soup.find('script')).split(',')
             artist_genders[artist] = 'M?'
             for tag in tags:
-                if 'female' in tag or 'Female' in tag:
+                if 'female' in tag or 'Female' in tag or 'Women' in tag or \
+                        'women' in tag or 'Woman' in tag or 'woman' in tag:
                     artist_genders[artist] = 'F'
                     break
-                elif 'male' in tag or 'Male' in tag:
+                elif 'male' in tag or 'Male' in tag or 'Man' in tag or 'man'\
+                        in tag or 'Men' in tag or 'men' in tag:
                     artist_genders[artist] = 'M'
                     break
         song_name = details[2].replace('Song:   ', '')
@@ -183,7 +185,7 @@ def data_profanities(url):
         songs_dt = songs_dt.append(pd.DataFrame(columns=COLUMNS,
                                                 data=[song_details]))
     songs_dt.reset_index(drop=True, inplace=True)
-    songs_dt.to_json('songs_dt.json', orient='table', indent=4)
+    songs_dt.to_json('songs_dt2.json', orient='table', indent=4)
 
 
 if __name__ == "__main__":
