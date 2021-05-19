@@ -5,7 +5,7 @@ import pandas as pd
 SIGNS = ['.', ',', ':', ';', '!', '?', '*', '#', '@', '&', '-', '(', ')',
          '[', ']', '{', '}']
 COLUMNS = ["Song", "Artist", "Gender", "Album", "Date", "URL", "Profanities"]
-OHHLA_SITE =' http://ohhla.com/'
+OHHLA_SITE = ' http://ohhla.com/'
 
 
 def read_wordlist_file(filename):
@@ -26,6 +26,7 @@ def get_links_from_ugly(url, soup, lst):
     """
     Read links from relatively 'naked' menu pages, for albums and the songs
     in the albums
+    :param lst:
     :param url: The address of the menu page
     :param soup: The content of that menu page
     :return: A list of links to the texts of the songs
@@ -62,7 +63,8 @@ def find_all_songs(url):
             if link.get('href') is None:
                 continue
             artists.append(OHHLA_SITE + str(link.get('href')))
-        # The next lines are for moving between the pages to get all the artists
+        # The next lines are for moving between the pages to get all the
+        # artists
         # menus = soup.find('h3').find_all('a')
         # for menu in menus:
         #    link = menu.get('href')
@@ -171,7 +173,7 @@ def data_profanities(url):
                         'women' in tag or 'Woman' in tag or 'woman' in tag:
                     artist_genders[artist] = 'F'
                     break
-                elif 'male' in tag or 'Male' in tag or 'Man' in tag or 'man'\
+                elif 'male' in tag or 'Male' in tag or 'Man' in tag or 'man' \
                         in tag or 'Men' in tag or 'men' in tag:
                     artist_genders[artist] = 'M'
                     break
@@ -185,8 +187,8 @@ def data_profanities(url):
         songs_dt = songs_dt.append(pd.DataFrame(columns=COLUMNS,
                                                 data=[song_details]))
     songs_dt.reset_index(drop=True, inplace=True)
-    songs_dt.to_json('songs_dt2.json', orient='table', indent=4)
+    songs_dt.to_json('songs_dt5.json', orient='table', indent=4)
 
 
 if __name__ == "__main__":
-    data_profanities('http://ohhla.com/all.html')
+    data_profanities('http://ohhla.com/all_five.html')
