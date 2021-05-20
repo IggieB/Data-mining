@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def convert_json_to_csv(files):
     # now we will open a file for writing
-    data_file = open("full_songs_dt.csv", 'w', encoding='utf-8')
+    data_file = open("songs_dt.csv", 'w', encoding='utf-8')
 
     for file in files:
         # Opening JSON file and loading the data into the variable data
@@ -33,7 +33,8 @@ def convert_json_to_csv(files):
 
 
 if __name__ == "__main__":
-    # print(convert_json_to_csv(["songs_dt.json", "songs_dt2.json",
-    #                            "songs_dt3.json", "songs_dt4.json",
-    #                            "songs_dt5.json"])) # WORKS! full file exists
-    pass
+    print(convert_json_to_csv(["songs_dt.json",
+                               # "songs_dt2.json",
+                               # "songs_dt3.json", "songs_dt4.json",
+                               # "songs_dt5.json"
+                               ]))

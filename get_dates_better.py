@@ -8,7 +8,7 @@ webD = wb.Chrome('chromedriver.exe')
 
 
 def get_dates():
-    songs = pd.read_json('songs_dt.json', orient='table')
+    songs = pd.read_json('songs_dt2.json', orient='table')
     dates = list(songs['Date'])
     albums = songs["Album"]
     artists = songs["Artist"]
@@ -19,7 +19,7 @@ def get_dates():
             print(dates[index])
             print(type(dates[index]))
             if albums[index].upper() not in found_albums:
-                if str(dates[index]) != 'nan':
+                if type(dates[index]) != pd._libs.tslibs.nattype.NaTType:
                     continue
                 webD.get('https://www.discogs.com/search/?q=' + albums[index].split(
                     '(')[0].replace(' ', '+') + '+' + artists[index].replace(
@@ -41,10 +41,10 @@ def get_dates():
                 found_albums[albums[index].upper()] = year
             dates[index] = found_albums[albums[index].upper()]
         songs = songs.assign(Date=dates)
-        songs.to_json('songs_dt.json', orient='table', indent=4)
+        songs.to_json('songs_dt2.json', orient='table', indent=4)
     except WebDriverException:
         songs = songs.assign(Date=dates)
-        songs.to_json('songs_dt.json', orient='table', indent=4)
+        songs.to_json('songs_dt2.json', orient='table', indent=4)
 
 
 if __name__ == "__main__":
