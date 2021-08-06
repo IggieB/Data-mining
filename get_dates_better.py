@@ -2,13 +2,17 @@ from selenium.common.exceptions import ElementClickInterceptedException, \
     NoSuchElementException, WebDriverException
 from selenium import webdriver as wb
 import pandas as pd
+import time
 
 
 webD = wb.Chrome('chromedriver.exe')
 
 
 def get_dates():
-    songs = pd.read_json('songs_dt2.json', orient='table')
+    try:
+        songs = pd.read_json('songs_dt2.json', orient='table')
+    except AssertionError as err:
+        raise err
     dates = list(songs['Date'])
     albums = songs["Album"]
     artists = songs["Artist"]
@@ -16,30 +20,40 @@ def get_dates():
     start = 0
     try:
         for index in range(len(albums)):
-            print(dates[index])
-            print(type(dates[index]))
-            if albums[index].upper() not in found_albums:
-                if type(dates[index]) != pd._libs.tslibs.nattype.NaTType:
-                    continue
-                webD.get('https://www.discogs.com/search/?q=' + albums[index].split(
-                    '(')[0].replace(' ', '+') + '+' + artists[index].replace(
-                    ' ', '+') + '&type=release&layout=sm')
+            if 48 <= ord(str(dates[index])[0]) <= 57:
+                continue
+            if str(albums[index]).lower() not in found_albums:
+                webD.get(
+                    'https://www.discogs.com/search/?q=' + str(albums[
+                        index]).split('(')[0].replace(' ', '+') + '+' + str(
+                        artists[index]).replace(' ', '+') +
+                    '&type=release&layout=sm')
                 if start == 0:
-                    webD.find_element_by_xpath('/html/body/div[6]/div[3]/div/div['
-                                               '1]/div/div[2]/div/button[2]').click()
+                    time.sleep(2)
                     webD.find_element_by_xpath(
-                        '/html/body/div[6]/div[2]/div[3]/div[1]/button').click()
+                        '/html/body/div[5]/div[2]/div/div[1]/div/div[2]/div/button[2]').click()
+                    time.sleep(2)
+                    webD.find_element_by_xpath(
+                        '/html/body/div[5]/div[3]/div[3]/div[1]/button').click()
                     start = 1
                 try:
-                    year = int(webD.find_element_by_class_name('card_release_year').text[-4:])
-                    if year < 1980:
+                    card = webD.find_element_by_class_name('card_body')
+                    title = card.find_element_by_tag_name('h4').text.lower()
+                    if str(albums[index]).lower().split(' (')[0] not in title:
+                        if str(artists[index]).lower().split(' (')[0] not in \
+                                title:
+                            continue
+                    year = card.find_element_by_class_name(
+                        'card_release_year').text[-4:]
+                    if int(year) < 1980:
                         year = None
                 except ElementClickInterceptedException:
                     year = None
                 except NoSuchElementException:
                     year = None
-                found_albums[albums[index].upper()] = year
-            dates[index] = found_albums[albums[index].upper()]
+                found_albums[str(albums[index]).lower()] = year
+            dates[index] = found_albums[str(albums[index]).lower()]
+            print(str(dates[index])[0])
         songs = songs.assign(Date=dates)
         songs.to_json('songs_dt2.json', orient='table', indent=4)
     except WebDriverException:
