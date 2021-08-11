@@ -35,13 +35,13 @@ def get_album_lst():
                     if 48 > ord(letter) or 57 < ord(letter):
                         album = album.replace(letter, '-')
             album = album.replace('--', '')
-            rtists = artists[index].lower().split(' feat')[0]\
+            artists = artists[index].lower().split(' feat')[0]\
                 .replace(' x ', ' & ').split(
                 ' &')
-            for ind in range(len(rtists)):
-                rtists[ind] = rtists[ind].split(' (')[0]
+            for ind in range(len(artists)):
+                artists[ind] = artists[ind].split(' (')[0]
             art = ''
-            for artist in rtists:
+            for artist in artists:
                 for nikud in NIKUDS:
                     artist = artist.replace(nikud, '')
                 arts = artist.split(' ')

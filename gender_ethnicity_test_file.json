@@ -1,0 +1,260 @@
+{
+    "schema":{
+        "fields":[
+            {
+                "name":"index",
+                "type":"integer"
+            },
+            {
+                "name":"Song",
+                "type":"string"
+            },
+            {
+                "name":"Artist",
+                "type":"string"
+            },
+            {
+                "name":"Gender",
+                "type":"string"
+            },
+            {
+                "name":"Ethnicity",
+                "type":"string"
+            },
+            {
+                "name":"Album",
+                "type":"string"
+            },
+            {
+                "name":"Date",
+                "type":"number"
+            },
+            {
+                "name":"URL",
+                "type":"string"
+            },
+            {
+                "name":"Profanities",
+                "type":"string"
+            }
+        ],
+        "primaryKey":[
+            "index"
+        ],
+        "pandas_version":"0.20.0"
+    },
+    "data":[
+        {
+            "index":2,
+            "Song":"I Heard",
+            "Artist":"03 GREEDO",
+            "Gender":"?M",
+            "Ethnicity":"Unknown",
+            "Album":"First Night Out (Mixtape)",
+            "Date":"2017",
+            "URL":" http:\/\/ohhla.com\/anonymous\/03greedo\/firstout\/i_heard.03g.txt",
+            "Profanities":{
+                "bitches":3,
+                "hell":1,
+                "shit":1,
+                "bitch":1,
+                "nigga":1,
+                "ho":1
+            }
+        },
+        {
+            "index":1640,
+            "Song":"Come Yah Nuh Me Gal",
+            "Artist":"VYBZ KARTEL",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Kartel Forever: Trilogy",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/vybzkart\/kartel_f\/come_gal.vyb.txt",
+            "Profanities":{
+                "pussy":5
+            }
+        },
+        {
+            "index":1641,
+            "Song":"Compass",
+            "Artist":"VYBZ KARTEL",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Kartel Forever: Trilogy",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/vybzkart\/kartel_f\/compass.vyb.txt",
+            "Profanities":{
+                "fucking":1
+            }
+        },
+        {
+            "index":1642,
+            "Song":"Convertible",
+            "Artist":"VYBZ KARTEL",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Kartel Forever: Trilogy",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/vybzkart\/kartel_f\/convert.vyb.txt",
+            "Profanities":{
+                "pussy":13
+            }
+        },
+        {
+            "index":1643,
+            "Song":"The Cure (Fi Bad Mind)",
+            "Artist":"VYBZ KARTEL",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Kartel Forever: Trilogy",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/vybzkart\/kartel_f\/curefibd.vyb.txt",
+            "Profanities":{
+
+            }
+        },
+        {
+            "index":1644,
+            "Song":"Dandy Shandy",
+            "Artist":"VYBZ KARTEL",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Kartel Forever: Trilogy",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/vybzkart\/kartel_f\/dandysha.vyb.txt",
+            "Profanities":{
+                "pussy":10,
+                "fuck":2
+            }
+        },
+        {
+            "index":1645,
+            "Song":"Dead Already",
+            "Artist":"VYBZ KARTEL",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Kartel Forever: Trilogy",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/vybzkart\/kartel_f\/deadalre.vyb.txt",
+            "Profanities":{
+
+            }
+        },
+        {
+            "index":1646,
+            "Song":"Dumpa Truck\/That Sweet Yuh",
+            "Artist":"VYBZ KARTEL",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Kartel Forever: Trilogy",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/vybzkart\/kartel_f\/dmptruck.vyb.txt",
+            "Profanities":{
+                "pussy":16,
+                "cock":3,
+                "fuck":9,
+                "blow":2
+            }
+        },
+        {
+            "index":19315,
+            "Song":"Simon Says",
+            "Artist":"MEGAN THEE STALLION",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Fever",
+            "Date":"2019",
+            "URL":" http:\/\/ohhla.com\/anonymous\/meganthe\/fever\/simonsay.meg.txt",
+            "Profanities":{
+                "fuck":1,
+                "nigga":2,
+                "butt":2,
+                "hoes":2,
+                "pussy":3,
+                "ass":2,
+                "swallow":1,
+                "bitches":1
+            }
+        },
+        {
+            "index":2169,
+            "Song":"Vanity",
+            "Artist":"WALE",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"The Gifted",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/wale\/gifted\/vanity.wle.txt",
+            "Profanities":{
+                "shit":3,
+                "niggaz":1,
+                "pussy":1,
+                "bitches":1,
+                "fucking":2
+            }
+        },
+        {
+            "index":6551,
+            "Song":"Renagade",
+            "Artist":"JAY-Z",
+            "Gender":"?M",
+            "Ethnicity":"Unknown",
+            "Album":"The Blueprint",
+            "Date":"2001",
+            "URL":" http:\/\/ohhla.com\/anonymous\/jigga\/blue\/renagade.jyz.txt",
+            "Profanities":{
+                "niggaz":1,
+                "fucked":1,
+                "swallow":1,
+                "motherfuckin":2,
+                "drug":1,
+                "addict":1,
+                "kid":2,
+                "stupid":1,
+                "fuckin":1,
+                "joint":1,
+                "die":1,
+                "mad":1,
+                "pistol":1
+            }
+        },
+        {
+            "index":2171,
+            "Song":"Bricks",
+            "Artist":"WALE",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"The Gifted",
+            "Date":"2013",
+            "URL":" http:\/\/ohhla.com\/anonymous\/wale\/gifted\/bricks.wle.txt",
+            "Profanities":{
+                "fuck":1,
+                "nigga":4,
+                "hoes":1
+            }
+        },
+        {
+            "index":6187,
+            "Song":"It's Ok",
+            "Artist":"EMINEM",
+            "Gender":"M",
+            "Ethnicity":"Unknown",
+            "Album":"Infinite",
+            "Date":null,
+            "URL":" http:\/\/ohhla.com\/anonymous\/eminem\/infinite\/its_ok.mnm.txt",
+            "Profanities":{
+                "buried":1,
+                "shit":2,
+                "sick":1,
+                "weapon":1,
+                "illegal":1,
+                "dope":1,
+                "crack":1,
+                "addicts":1,
+                "dumb":1,
+                "scum":1
+            }
+        }
+    ]
+}
