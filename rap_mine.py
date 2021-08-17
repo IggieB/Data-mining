@@ -4,7 +4,7 @@ import pandas as pd
 
 SIGNS = ['.', ',', ':', ';', '!', '?', '*', '#', '@', '&', '-', '(', ')',
          '[', ']', '{', '}']
-COLUMNS = ["Song", "Artist", "Gender", "Ethnicity", "Album", "Date", "URL",
+COLUMNS = ["Song", "Artist", "Gender", "Album", "Date", "URL",
            "Profanities"]
 OHHLA_SITE = ' http://ohhla.com/'
 
