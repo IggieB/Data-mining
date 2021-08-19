@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import re
+import json
+import sys
 
 SIGNS = ['.', ',', ':', ';', '!', '?', '*', '#', '@', '&', '-', '(', ')',
          '[', ']', '{', '}']
@@ -56,11 +58,9 @@ def process_lyrics(one_lyrics):
             if "[" in word and "]" in word:
                 continue
             print(word)
-            if word and word[0] in SIGNS:
-                word = word[1:]
-            if word and word[-1] in SIGNS:
-                word = word[:-1]
-            clean_words.append(word)
+            clean_word = re.search(r"[\w]+\W{0,1}[\w]+", word)
+            if clean_word:
+                clean_words.append(clean_word[0])
         song_words_list.extend(clean_words)
     return song_words_list
 
@@ -74,11 +74,25 @@ def add_songs_lyrics_to_data(json_file):
         lyrics_words = process_lyrics(lyrics)
         all_lyrics.append(lyrics_words)
     songs_data['Lyrics'] = all_lyrics
-    songs_data.to_json('songs_dt_1808_new.json', orient='table', indent=4)
+    songs_data.to_json(json_file, orient='table', indent=4)
     print("done")
 
 
+def divide_json_files(file):
+    name_idx = 69
+    full_file = pd.read_json(file, orient='table')
+    print(full_file)
+    df_1 = full_file.iloc[:1112:]
+    df_2 = full_file.iloc[1112:2224]
+    df_3 = full_file.iloc[2224:3336:]
+    df_4 = full_file.iloc[3336::]
+    df_list = [df_1, df_2, df_3, df_4]
+    for single_df in df_list:
+        single_df.reset_index(drop=True, inplace=True)
+        single_df.to_json('songs_dt_part_' + str(name_idx) + ".json",
+                         orient='table', indent=4)
+        name_idx += 1
+
 if __name__ == '__main__':
-    add_songs_lyrics_to_data("songs_dt_1808.json")
-    ex_ly = ["I bought a big brown teddy bear", "[verse X2]", "Hello world", "[Chorus]"]
-    print(process_lyrics(ex_ly))
+    # print(add_songs_lyrics_to_data("songs_dt.json"))
+    print(divide_json_files("songs_dt_divided_18.json"))
