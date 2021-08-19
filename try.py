@@ -29,5 +29,4 @@ def read_jas(filename):
 # read_jas('songs_dt5.json')
 
 if __name__ == '__main__':
-    # dfv
     print('hello')
