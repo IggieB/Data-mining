@@ -52,4 +52,6 @@ def remake_dicts(filename):
 
 
 if __name__ == '__main__':
-    remake_dicts('songs_dt_part_16.json')
+    for i in range(1,17):
+        print("working on file" + str(i))
+        remake_dicts('songs_dt_part_' +  str(i) + '.json')
