@@ -33,29 +33,23 @@ def book_stemming(words_list):
 def remake_dicts(filename):
     df = pd.read_json(filename, orient='table')
     profanities = read_wordlist_file('bad-words.txt')
+    lst = []
     for row in df.iterrows():
         used_swears = {}
         lyrics = row[1]['Lyrics']
         for ind in range(len(lyrics)):
-            lyrics[ind] = lyrics.replace('-', '')
+            lyrics[ind] = lyrics[ind].replace('-', '').lower()
         lyrics = book_stemming(lyrics)
         for word in lyrics:
             if word in profanities:
-                if word not in used_swears:
-                    used_swears[word] = 1
-                else:
+                if word in used_swears:
                     used_swears[word] += 1
-        df.loc[row[0], 'Profanities'] = used_swears
+                else:
+                    used_swears[word] = 1
+        lst.append(used_swears)
+    df['Profanities'] = lst
     df.to_json(filename, orient='table', indent=4)
 
 
 if __name__ == '__main__':
-    all_profanities = read_wordlist_file('bad-words.txt')
-    lst = book_stemming(all_profanities)
-    print(len(lst))
-    new_lst = []
-    for word in lst:
-        if word not in new_lst:
-            new_lst.append(word)
-    write_output_file(new_lst, 'bad-words2.txt')
-    print(len(new_lst))
+    remake_dicts('songs_dt_part_16.json')
