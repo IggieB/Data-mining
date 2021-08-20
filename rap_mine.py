@@ -4,7 +4,8 @@ import pandas as pd
 
 SIGNS = ['.', ',', ':', ';', '!', '?', '*', '#', '@', '&', '-', '(', ')',
          '[', ']', '{', '}']
-COLUMNS = ["Song", "Artist", "Gender", "Album", "Date", "URL", "Profanities"]
+COLUMNS = ["Song", "Artist", "Gender", "Album", "Date", "URL",
+           "Profanities"]
 OHHLA_SITE = ' http://ohhla.com/'
 
 
@@ -181,9 +182,10 @@ def data_profanities(url):
         song_lyrics = details[5:]
         profanities = find_profanities(song_lyrics, all_profanities)
         gender = artist_genders[artist]
+        ethnicity = "Unknown"
         date = None
-        song_details = [song_name, artist, gender, album, date, song,
-                        profanities]
+        song_details = [song_name, artist, gender, ethnicity ,album, date,
+                        song, profanities]
         songs_dt = songs_dt.append(pd.DataFrame(columns=COLUMNS,
                                                 data=[song_details]))
     songs_dt.reset_index(drop=True, inplace=True)
