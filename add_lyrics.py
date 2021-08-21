@@ -94,4 +94,5 @@ def divide_json_files(file):
         name_idx += 1
 
 if __name__ == '__main__':
-    print(add_songs_lyrics_to_data("songs_dt_part_17.json"))
+    for i in range(18, 26):
+        print(add_songs_lyrics_to_data('songs_dt_part_' +  str(i) + '.json'))
