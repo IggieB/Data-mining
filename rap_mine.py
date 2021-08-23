@@ -189,7 +189,8 @@ def data_profanities(url):
         songs_dt = songs_dt.append(pd.DataFrame(columns=COLUMNS,
                                                 data=[song_details]))
     songs_dt.reset_index(drop=True, inplace=True)
-    songs_dt.to_json('songs_dt5.json', orient='table', indent=4)
+    # TODO: we changed the file to part 1 just to delete old files!
+    songs_dt.to_json('songs_dt_part_1.json', orient='table', indent=4)
 
 
 if __name__ == "__main__":
