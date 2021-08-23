@@ -4,8 +4,7 @@ import requests
 NIKUDS = ['.', ',', ':', ';', '!', '?', ' &']
 COLUMNS = ["Song", "Artist", "Gender", "Ethnicity", "Album", "Date", "URL",
            "Profanities"]
-RAP_DATA = ["songs_dt.json", "songs_dt2.json", "songs_dt3.json",
-            "songs_dt4.json", "songs_dt5.json"]
+DATA_FILES = ["songs_dt_part_" + str(i) + ".json" for i in range(1, 73)]
 # dict with all the relevant wiki tag page links
 WIKI_CATEGORIES = {
     "African-American Female": [
@@ -197,4 +196,4 @@ def create_data_only_with_gen_and_ethnicity(files):
 
 
 if __name__ == "__main__":
-    create_data_only_with_gen_and_ethnicity(RAP_DATA)
+    create_data_only_with_gen_and_ethnicity(DATA_FILES)

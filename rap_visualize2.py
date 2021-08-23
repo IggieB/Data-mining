@@ -97,7 +97,8 @@ def create_one_category_frequ_df_over_time(dic, category):
 
 
 if __name__ == '__main__':
-    d = categories_frequency_over_time('rap_sample_years.csv')
+    # d = categories_frequency_over_time('rap_sample_years.csv') - this file
+    # does not exist anymore!!!
     # print(d)
     puss_df = create_one_category_frequ_df_over_time(d, PUSS[0])
     nig_df = create_one_category_frequ_df_over_time(d, NIG[0])
