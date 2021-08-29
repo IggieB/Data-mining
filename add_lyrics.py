@@ -77,20 +77,24 @@ def add_songs_lyrics_to_data(json_file):
 
 
 def divide_json_files(file):
-    name_idx = 69
+    name_idx = 1
     full_file = pd.read_json(file, orient='table')
-    print(full_file)
-    df_1 = full_file.iloc[:1112:]
-    df_2 = full_file.iloc[1112:2224]
-    df_3 = full_file.iloc[2224:3336:]
-    df_4 = full_file.iloc[3336::]
-    df_list = [df_1, df_2, df_3, df_4]
+    start_row = 0
+    end_row = 1591
+    df_list = []
+    for i in range(1, 30):
+        df_i = full_file.iloc[start_row:end_row:]
+        start_row = end_row
+        end_row += 1591
+        df_list.append(df_i)
+    df_30 = full_file.iloc[start_row::]
+    df_list.append(df_30)
     for single_df in df_list:
         single_df.reset_index(drop=True, inplace=True)
-        single_df.to_json('songs_dt_part_' + str(name_idx) + ".json",
+        single_df.to_json('songs_dt_w_gen_ethn_part_' + str(name_idx) +
+                          ".json",
                          orient='table', indent=4)
         name_idx += 1
 
 if __name__ == '__main__':
-    for i in range(66, 73):
-        print(add_songs_lyrics_to_data('songs_dt_part_' +  str(i) + '.json'))
+    pass
