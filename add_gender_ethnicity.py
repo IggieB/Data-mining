@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 NIKUDS = ['.', ',', ':', ';', '!', '?', ' &']
 COLUMNS = ["Song", "Artist", "Gender", "Ethnicity", "Album", "Date", "URL",
-           "Profanities"]
+           "Profanities", "Lyrics"]
 DATA_FILES = ["songs_dt_part_" + str(i) + ".json" for i in range(1, 73)]
 # dict with all the relevant wiki tag page links
 WIKI_CATEGORIES = {
@@ -183,12 +183,13 @@ def create_data_only_with_gen_and_ethnicity(files):
             # checking for each artist if there is gender or ethnicity data.
             # if so adds the artist row to a new dataframe
             if row['Gender'] != "Unknown" or row['Ethnicity'] != "Unknown":
-                song_details = [row['Song'], row['Artist'], row['Gender'],
-                                row['Ethnicity'], row['Album'], row['Date'],
-                                row['URL'], row['Profanities']]
-                print(song_details)
-                songs_dt = songs_dt.append(pd.DataFrame(columns=COLUMNS,
-                                                        data=[song_details]))
+                if row["Lyrics"] not in songs_dt.values:
+                    song_details = [row['Song'], row['Artist'], row['Gender'],
+                                    row['Ethnicity'], row['Album'], row['Date'],
+                                    row['URL'], row['Profanities'], row["Lyrics"]]
+                    print(song_details)
+                    songs_dt = songs_dt.append(pd.DataFrame(columns=COLUMNS,
+                                                            data=[song_details]))
     # saving the new dataframe to a new file
     songs_dt.reset_index(drop=True, inplace=True)
     songs_dt.to_json('artists_with_gender_or_ethnicity.json',
