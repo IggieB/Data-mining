@@ -16,13 +16,6 @@ def read_wordlist_file(filename):
     return word_file
 
 
-def write_output_file(results, output_filename):
-    results = '\n'.join(results)
-    file = open(output_filename, 'w')
-    file.writelines(results)
-    file.close()
-
-
 def book_stemming(words_list):
     porter = PorterStemmer()
     for i in range(len(words_list)):
@@ -52,6 +45,9 @@ def remake_dicts(filename):
 
 
 if __name__ == '__main__':
-    for i in range(66, 73):
+    for i in range(1, 73):
         print("working on file" + str(i))
         remake_dicts('songs_dt_part_' +  str(i) + '.json')
+    for i in range(1, 31):
+        print("working on file" + str(i))
+        remake_dicts('songs_dt_w_gen_ethn_part_' + str(i) + '.json')
