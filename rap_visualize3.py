@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 GEN, ETHN = "Gender", "Ethnicity"
 FULL_JSONS = ["songs_dt_w_gen_ethn_part_{}.json".format(i) for i in
               range(1, 31)]
+ALL_JSONS = ["songs_dt_part_{}.json".format(i) for i in
+              range(1, 73)]
 EN_SPEAKER = []
 
 EU = ["French", "Spanish", "English", "German", "British", "Black British"]
@@ -126,9 +128,7 @@ def most_popular_prof_per_field_group(jsons_list, field, field_options):
 
 
 def visual_compare_groups_popular_profs(groups_dict, y_lim, x_label, y_label,
-                                        title, colors=None):
-    if colors is None:
-        colors = []
+                                        title, colors='blue'):
     groups = groups_dict.keys()
     profs = [val[0] for key, val in groups_dict.items()]
     y = [val[1] for key, val in groups_dict.items()]
@@ -268,9 +268,47 @@ def diversion_pie_chart(dictionary):
     plt.show()
 
 
+def most_popular_profanity_in_year(jsons_list):
+    field_summary = {}
+    for i in range(1980, 2022):
+        option_info = category_option_most_popular_prof(jsons_list, 'Date', [i])
+        field_summary[i] = option_info
+    return field_summary
+
+
+def update_year_dict(dataframe, year_dict):
+    for year in range(1980, 2022):
+        df_year = dataframe.loc[dataframe['Date'] == year]
+        if len(df_year) == 0:
+            continue
+        lyric_num = 0
+        profanity_num = 0
+        for row in df_year.iterrows():
+            lyric_num += len(row[1]['Lyrics'])
+            profanity_num += sum(row[1]["Profanities"].values())
+        profanity_percent = (profanity_num / lyric_num) * 100
+        year_dict[year].append(profanity_percent)
+    return(year_dict)
+
+
+def profanity_percent_in_year(jsons_list, field=None, field_options=None):
+    if field is None:
+        year_dict = {}
+        for year in range(1980, 2022):
+            year_dict[year] = []
+        for json in jsons_list:
+            df = pd.read_json(json, orient='table')
+            year_dict = update_year_dict(df, year_dict)
+        for year in range(1980, 2022):
+            year_dict[year] = sum(year_dict[year]) / len(year_dict[year])
+        return [year_dict]
+    else:
+        for options in field_options.items():
+            print(1)
+
+
 if __name__ == '__main__':
     all_genders = {"males": ["Male"], "females": ["Female"]}
-
     # GROUPS COMPARISON
 
     # 1: Show the top profanity of each gender's rappers and it's frequency
@@ -321,3 +359,22 @@ if __name__ == '__main__':
     #                                                       PROFS_THEMES)
     # print(females_diversion)
     # diversion_pie_chart(females_diversion)
+    # 6: Most popular profanity in every year
+    # year_profanities = (most_popular_profanity_in_year(ALL_JSONS))
+    year_profanities = {1980: ('nigga', 28.26086956521739), 1981: ('nigga', 23.703703703703706), 1982: ('nigga', 30.69544364508393), 1983: ('shit', 34.95145631067961), 1984: ('sucker', 19.34156378600823), 1985: ('nigga', 20.709491850431448), 1986: ('nigga', 13.432835820895523), 1987: ('nigga', 13.040901007705989), 1988: ('fuck', 13.253279964420726), 1989: ('fuck', 9.451130026416202), 1990: ('shit', 10.114444788122487), 1991: ('fuck', 12.25094238018309), 1992: ('nigga', 11.832448236768304), 1993: ('nigga', 15.104812200247885), 1994: ('nigga', 18.8470172422028), 1995: ('nigga', 22.074542243702947), 1996: ('nigga', 20.056889370492026), 1997: ('nigga', 22.376703327107975), 1998: ('nigga', 25.90283517194294), 1999: ('nigga', 25.55496100274035), 2000: ('nigga', 23.48213921485974), 2001: ('nigga', 21.230448383733055), 2002: ('nigga', 21.041923551171394), 2003: ('nigga', 18.64816656947827), 2004: ('nigga', 16.710428625753764), 2005: ('nigga', 19.29318974670105), 2006: ('nigga', 18.7636270360395), 2007: ('nigga', 23.12925170068027), 2008: ('nigga', 22.160737812911727), 2009: ('nigga', 20.118555190046575), 2010: ('nigga', 18.00212183818192), 2011: ('nigga', 19.725118749824336), 2012: ('nigga', 20.619781103254216), 2013: ('nigga', 26.873959775389256), 2014: ('nigga', 26.52451336725628), 2015: ('nigga', 27.280658025922232), 2016: ('nigga', 26.15596033627937), 2017: ('nigga', 21.80208275324386), 2018: ('nigga', 22.941344369915797), 2019: ('nigga', 24.880778911114053), 2020: ('nigga', 22.831050228310502), 2021: ('nigga', 26.508425439391193)}
+    visual_compare_groups_popular_profs(year_profanities, 50,
+                                        "Most Popular Profanities Evey Year",
+                                        "Top profanity's frequency (%)",
+                                        "Most popular profanity - Years "
+                                        "Comparison")
+    # 7: Percent of Profanities in year
+    profanities_year_percents = profanity_percent_in_year(FULL_JSONS)
+    plt.title('Profanities frequencies over time')
+
+    plt.plot(profanities_year_percents.keys(), profanities_year_percents.values())
+
+    plt.legend()
+    plt.xlabel('Year')
+    plt.ylabel('Percentage of Profanities in Rap Songs')
+    plt.legend()
+    plt.show()
