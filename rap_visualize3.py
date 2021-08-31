@@ -310,6 +310,11 @@ def diversion_pie_chart(dictionary):
 
 # YEARS
 def most_popular_profanity_in_year(jsons_list):
+    """
+    A function to find the most used profanity in every year
+    :param jsons_list: A list of json files with the songs dataframe
+    :return: A dictionary of key=year, value=(top prof, percentage of shows).
+    """
     field_summary = {}
     for i in range(1980, 2022):
         option_info = category_option_most_popular_prof(jsons_list, 'Date',
@@ -319,6 +324,15 @@ def most_popular_profanity_in_year(jsons_list):
 
 
 def profanity_percent_in_year(jsons_list, field=None, field_option=None):
+    """
+    A function for showing how frequently songs used profanities in their
+    vocabulary
+    :param jsons_list: A list of json files with the songs dataframe
+    :param field: The category on which we want the specification
+    :param field_option: A list of groups of whom we want to count
+    :return: A dictionary of years and the percent of profanities in their
+    lyrics
+    """
     year_dict = {}
     for year in range(1980, 2022):
         year_dict[year] = []
@@ -396,7 +410,9 @@ categories_dict = {"ass related": ass,
                    "drugs related": drugs,
                    "anti latin": anti_latin,
                    "anti roma": anti_roma,
-                   "anti native": anti_native}
+                   "anti native": anti_native,
+                   "pussy_and_breasts": pussy_and_breasts,
+                   "dick_and_sperm": dick_and_sperm}
 
 
 def get_n_longest_values_g(dictionary, n):
@@ -420,6 +436,85 @@ def create_top_n_themes_dict(dict, n):
         key = item[0]
         valid_top_ten_dict[key] = valid_dict[key]
     return valid_top_ten_dict
+
+
+def get_population_percent(jsons_list, field, field_option):
+    """
+    A function which shows the rise and fall of the number of rappers from a
+    specific background
+    :param jsons_list: A list of json files with the songs dataframe
+    :param field: The category on which we want the specification
+    :param field_option: A list of groups of whom we want to count
+    :return: A dictionary of years and the percent of our chosen groups out
+    of the whole database
+    """
+    year_dict = {}
+    for year in range(1980, 2022):
+        year_dict[year] = []
+    for json in jsons_list:
+        df = pd.read_json(json, orient='table')
+        for year in range(1980, 2022):
+            df_year = df.loc[df['Date'] == year]
+            all_songs_in_doc_and_year = len(df_year)
+            if all_songs_in_doc_and_year == 0:
+                continue
+            part = 0
+            for opt in field_option:
+                part += len(df_year.loc[df_year[field] == opt])
+            profanity_percent = (part / all_songs_in_doc_and_year) * 100
+            year_dict[year].append(profanity_percent)
+    for year in range(1980, 2022):
+        sum_year = sum(year_dict[year])
+        data_length = len(year_dict[year])
+        if data_length == 0:
+            year_dict[year] = 0
+            continue
+        year_dict[year] = sum_year / data_length
+    return year_dict
+
+
+def follow_profanity_type(jsons_list, profanities):
+    """
+    A function for a dictionary which shows the percent of a profanity type
+    in any given year from 1980 to 2021
+    :param jsons_list: A list of json files with the songs dataframe
+    :param profanities: A string of the name of the profanity type
+    :return: A dictionary of years and the percent of that profanity type
+    among overall profanities
+    """
+    year_dict = {}
+    for year in range(1980, 2022):
+        year_dict[year] = []
+    profanity_lst = create_valid_themes_dict(categories_dict)[profanities]
+    for json in jsons_list:
+        df = pd.read_json(json, orient='table')
+        for year in range(1980, 2022):
+            df_year = df.loc[df['Date'] == year]
+            if len(df_year) == 0:
+                continue
+            percent_lst = []
+            for row in df_year.iterrows():
+                song_dict = row[1]['Profanities']
+                profanities_num = sum(song_dict.values())
+                if profanities_num == 0:
+                    continue
+                prof_count = 0
+                for word in song_dict.keys():
+                    if word in profanity_lst:
+                        prof_count += song_dict[word]
+                profanity_percent = (prof_count / profanities_num) * 100
+                percent_lst.append(profanity_percent)
+            if not percent_lst:
+                continue
+            year_dict[year].append(sum(percent_lst) / len(percent_lst))
+    for year in range(1980, 2022):
+        sum_year = sum(year_dict[year])
+        data_length = len(year_dict[year])
+        if data_length == 0:
+            year_dict[year] = 0
+            continue
+        year_dict[year] = sum_year / data_length
+    return year_dict
 
 
 if __name__ == '__main__':
@@ -490,13 +585,29 @@ if __name__ == '__main__':
     # per = theme_frequency_in_group(FULL_JSONS, ETHN, "black", BLACK, theme6, theme6_profs)
     # theme_group_diversion_pie_chart(per, "black", theme6)
 
-    # 10: Most popular profanity in every year
-    # year_profanities = (most_popular_profanity_in_year(ALL_JSONS))
-    # visual_compare_groups_popular_profs(year_profanities, 50,
-    #                                    "Most Popular Profanities Evey Year",
-    #                                    "Top profanity's frequency (%)",
-    #                                    "Most popular profanity - Years "
-    #                                    "Comparison")
+    # 7: Groups of swearwords over the years
+    black_profs = follow_profanity_type(ALL_JSONS, "black related")
+    mysog_profs = follow_profanity_type(ALL_JSONS, "mysogynistic")
+    sex_profs = follow_profanity_type(ALL_JSONS, "sex related")
+    #female_body_profs = follow_profanity_type(ALL_JSONS, "pussy_and_breasts")
+    #male_body_profs = follow_profanity_type(ALL_JSONS, "dick_and_sperm")
+    plt.title('Profanity Types Over Time')
+    plt.plot(black_profs.keys(),
+             black_profs.values(), label='Black related')
+    plt.plot(mysog_profs.keys(),
+             mysog_profs.values(), label='Misogyny related')
+    plt.plot(sex_profs.keys(),
+             sex_profs.values(), label='Sex related')
+    #plt.plot(female_body_profs.keys(),
+    #         female_body_profs.values(), label='Female body related')
+    #plt.plot(male_body_profs.keys(),
+    #         male_body_profs.values(), label='Male body related')
+    plt.legend()
+    plt.xlabel('Year')
+    plt.ylabel('Percentages of Profanities\' Types')
+    plt.legend()
+    plt.show()
+
     # 8: Percent of Profanities in year
     # profanities_year_percents = profanity_percent_in_year(ALL_JSONS)
     # plt.title('Profanities frequencies over time')
@@ -505,32 +616,68 @@ if __name__ == '__main__':
     # plt.xlabel('Year')
     # plt.ylabel('Percentage of Profanities in Rap Songs')
     # plt.show()
-    # 12: Percent of Profanities in year according to population
+
+    # 9: How many rappers were from different ethnicities and genders
+    #male_percent_dict = get_population_percent(FULL_JSONS, GEN, ['Male'])
+    #female_percent_dict = get_population_percent(FULL_JSONS, GEN, ['Female'])
+    us_percent_dict = get_population_percent(FULL_JSONS, ETHN, USA)
+    black_percent_dict = get_population_percent(FULL_JSONS, ETHN, BLACK)
+    #europe_percent_dict = get_population_percent(FULL_JSONS, ETHN, EU)
+    #america_percent_dict = get_population_percent(FULL_JSONS, ETHN, AMERICAS)
+    plt.title('Rise of Rappers by Percentage')
+    #plt.plot(male_percent_dict.keys(),
+    #         male_percent_dict.values(), label='Male')
+    #plt.plot(female_percent_dict.keys(),
+    #         female_percent_dict.values(), label='Female')
+    plt.plot(us_percent_dict.keys(),
+             us_percent_dict.values(), label='USA')
+    plt.plot(black_percent_dict.keys(),
+             black_percent_dict.values(), label='Blacks')
+    #plt.plot(europe_percent_dict.keys(),
+    #         europe_percent_dict.values(), label='Europe')
+    #plt.plot(america_percent_dict.keys(),
+    #         america_percent_dict.values(), label='America (not US)')
+    plt.legend()
+    plt.xlabel('Year')
+    plt.ylabel('Percentage out of all identified artists')
+    plt.legend()
+    plt.show()
+
+    # 10: Most popular profanity in every year
+    # year_profanities = (most_popular_profanity_in_year(ALL_JSONS))
+    # visual_compare_groups_popular_profs(year_profanities, 50,
+    #                                    "Most Popular Profanities Evey Year",
+    #                                    "Top profanity's frequency (%)",
+    #                                    "Most popular profanity - Years "
+    #                                    "Comparison")
+
+    # 11: Percent of Profanities in year according to population
     male_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
                                                                GEN, ['Male'])
     female_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
                                                                  GEN,
                                                                  ['Female'])
-    plt.title('Profanities frequencies over time')
+    plt.title('Percentage of Profanities in Rap Songs According to Gender')
     plt.plot(male_profanities_year_percents.keys(),
              male_profanities_year_percents.values(), label='Male')
     plt.plot(female_profanities_year_percents.keys(),
              female_profanities_year_percents.values(), label='Female')
     plt.legend()
     plt.xlabel('Year')
-    plt.ylabel('Percentage of Profanities in Rap Songs')
+    plt.ylabel('Percentage of Profanities')
     plt.legend()
     plt.show()
-    # 9: Percent of Profanities in year according to population
+
+    # 12: Percent of Profanities in year according to population
     europe_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
-                                                               ETHN, EU)
-    #african_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
+                                                                 ETHN, EU)
+    # african_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
     #                                                             ETHN, AF)
     usa_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
-                                                                  ETHN, USA)
-    #asian_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
+                                                              ETHN, USA)
+    # asian_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
     #                                                          ETHN, ASIA)
-    #mideast_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
+    # mideast_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
     #                                                              ETHN,
     #                                                              MIDDLE_EAST)
     america_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
@@ -538,26 +685,26 @@ if __name__ == '__main__':
                                                                   AMERICAS)
     # aussi_profanities_year_percents = profanity_percent_in_year(FULL_JSONS,
     #                                                              ETHN, AUS)
-    plt.title('Profanities frequencies over time')
+    plt.title('Profanities Frequencies Over Time According to Ethnicity')
     plt.plot(europe_profanities_year_percents.keys(),
              europe_profanities_year_percents.values(), label='European')
-    #plt.plot(african_profanities_year_percents.keys(),
+    # plt.plot(african_profanities_year_percents.keys(),
     #        african_profanities_year_percents.values(), label='African')
     plt.plot(usa_profanities_year_percents.keys(),
              usa_profanities_year_percents.values(), label='From US')
-    #plt.plot(asian_profanities_year_percents.keys(),
+    # plt.plot(asian_profanities_year_percents.keys(),
     #         asian_profanities_year_percents.values(), label='Asian')
-    #plt.plot(mideast_profanities_year_percents.keys(),
+    # plt.plot(mideast_profanities_year_percents.keys(),
     #         mideast_profanities_year_percents.values(),
     #         label='Middle-Eastern')
     plt.plot(america_profanities_year_percents.keys(),
              america_profanities_year_percents.values(), label='America (not '
                                                                'US)')
-    #plt.plot(aussi_profanities_year_percents.keys(),
+    # plt.plot(aussi_profanities_year_percents.keys(),
     #         aussi_profanities_year_percents.values(), label='Australian')
     plt.legend()
     plt.xlabel('Year')
-    plt.ylabel('Percentage of Profanities in Rap Songs')
+    plt.ylabel('Percentage of Profanities')
     plt.legend()
     plt.show()
 

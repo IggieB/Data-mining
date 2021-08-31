@@ -17,6 +17,11 @@ def read_wordlist_file(filename):
 
 
 def book_stemming(words_list):
+    """
+    Gets a list and returns the same list stemmed
+    :param words_list: A list of words
+    :return: The words list, with every word in it stemmed
+    """
     porter = PorterStemmer()
     for i in range(len(words_list)):
         words_list[i] = porter.stem(words_list[i])
@@ -24,6 +29,13 @@ def book_stemming(words_list):
 
 
 def remake_dicts(filename):
+    """
+    A function that gets a file name of our songs dataframe, and updates the
+    profanities dictionary of every song in it, using stemming
+    :param filename: The name of the file we want to update its songs'
+    profanities dictionary
+    :return: Nothing. Re-writes the file
+    """
     df = pd.read_json(filename, orient='table')
     profanities = read_wordlist_file('bad-words.txt')
     lst = []
