@@ -8,10 +8,17 @@ import time
 webD = wb.Chrome('chromedriver.exe')
 
 
-def get_dates():
+def get_dates(filename):
+    """
+    A function for injecting the dates of the songs, using their albums and
+    artists, by searching them in selenium and taking the year of the first
+    find, if the find do match the names
+    :param filename: The name of the upsated file with the songs dataframe
+    :return: Nothing. Re-writes the file
+    """
     try:
         #TODO: we changed the file to part 1 just to delete old files!
-        songs = pd.read_json('songs_dt_part_1.json', orient='table')
+        songs = pd.read_json(filename, orient='table')
     except AssertionError as err:
         raise err
     dates = list(songs['Date'])
@@ -56,11 +63,11 @@ def get_dates():
             dates[index] = found_albums[str(albums[index]).lower()]
             print(str(dates[index])[0])
         songs = songs.assign(Date=dates)
-        songs.to_json('songs_dt_part_1.json', orient='table', indent=4)
+        songs.to_json(filename, orient='table', indent=4)
     except WebDriverException:
         songs = songs.assign(Date=dates)
-        songs.to_json('songs_dt_part_1.json', orient='table', indent=4)
+        songs.to_json(filename, orient='table', indent=4)
 
 
 if __name__ == "__main__":
-    get_dates()
+    get_dates('songs_dt_part_1.json')

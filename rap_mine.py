@@ -1,3 +1,6 @@
+
+
+
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
@@ -139,10 +142,16 @@ def find_profanities(lyrics, profanities):
 
 
 def data_profanities(url):
+    """
+    A function that creates a new json file with a dataframe of songs from an
+    OHHLA page
+    :param url: The url of an OHHLA page with a list of artists,
+    in alphabetical order
+    :return: Nothing. Creates a json file
+    """
     songs_dt = pd.DataFrame(columns=COLUMNS)
     songs = find_all_songs(url)
     all_profanities = read_wordlist_file('bad-words.txt')
-    artist_genders = {}
     for song in songs:
         html = requests.get(song).text
         soup = BeautifulSoup(html, 'html.parser')
@@ -162,27 +171,11 @@ def data_profanities(url):
             album = details[1].replace('Album:  ', '')
         except IndexError:
             continue
-        if artist not in artist_genders:
-            artist_page = 'https://en.wikipedia.org/wiki/' + \
-                          artist.replace(' ', '_')
-            html = requests.get(artist_page).text
-            soup = BeautifulSoup(html, 'html.parser')
-            tags = str(soup.find('script')).split(',')
-            artist_genders[artist] = 'M?'
-            for tag in tags:
-                if 'female' in tag or 'Female' in tag or 'Women' in tag or \
-                        'women' in tag or 'Woman' in tag or 'woman' in tag:
-                    artist_genders[artist] = 'F'
-                    break
-                elif 'male' in tag or 'Male' in tag or 'Man' in tag or 'man' \
-                        in tag or 'Men' in tag or 'men' in tag:
-                    artist_genders[artist] = 'M'
-                    break
         song_name = details[2].replace('Song:   ', '')
         song_lyrics = details[5:]
         profanities = find_profanities(song_lyrics, all_profanities)
-        gender = artist_genders[artist]
-        ethnicity = "Unknown"
+        gender = '?'
+        ethnicity = "?"
         date = None
         song_details = [song_name, artist, gender, ethnicity ,album, date,
                         song, profanities]
