@@ -170,7 +170,7 @@ if __name__ == '__main__':
     # n = 3000 ~ 4 minutes
     # n = 5000 ~ 7 minutes
     # and so on...
-    full_data_df_frac = unite_lyrics(full_data_df.sample(n = 3000))
+    full_data_df_frac = unite_lyrics(full_data_df.sample(n = 10000))
     songs_lyrics = full_data_df_frac["Lyrics"]
     songs_titles = full_data_df_frac["Song"]
     ############ Vectorizing ##################
