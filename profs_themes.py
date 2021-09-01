@@ -74,6 +74,69 @@ def create_top_n_themes_dict(dict, n):
         valid_top_ten_dict[key] = valid_dict[key]
     return valid_top_ten_dict
 
+# pies backup for themes diversions, the function before it has been converted
+# to analyze also the full data
+# graph 13, 4, 5
+def full_profs_diversion_by_theme(json_files, prof_categories):
+    """
+    A function that shows the profanities' themes' diversion in one group
+    of artists' songs.
+    :param group_name: A string for the group of artists.
+    :param json_files: A list of json files names (strings)
+    :param category: The string representing the field of which we want to
+    explore one group. (e.g. "Gender" or "Ethnicity")
+    :param group: The group representative names (["Female"] or ["British",
+    "French"]
+    :param prof_categories: A dictionary of categories shown as
+    key=theme name string, value=theme words list.
+    :return: a dictionary of the key, value = theme, percentage.
+    """
+    themes_diversion_dict = {}
+    for one_json in json_files:
+        one_file_diversion = ingroup_profs_diversion_counts(one_json, category,
+                                                            group,
+                                                            prof_categories)
+        for cat, count in one_file_diversion.items():
+            if cat in themes_diversion_dict:
+                themes_diversion_dict[cat] += count
+            else:
+                themes_diversion_dict[cat] = count
+    total_prof_shows = sum(themes_diversion_dict.values())
+    for category_name, count in themes_diversion_dict.items():
+        themes_diversion_dict[category_name] = (count / total_prof_shows)\
+                                                    * 100
+    # sort the dictionary for the pie legend to be ordered from most popular to
+    # least.
+    sorted_themes_diversion = {key: value for key, value in
+                               sorted(themes_diversion_dict.items(),
+                                      key=lambda kv: kv[1], reverse=True)}
+    # pie chart
+    plt.style.use("fivethirtyeight")
+    categories = list(sorted_themes_diversion.keys())  # profs themes
+    fraction = list(sorted_themes_diversion.values())  # theme percentage
+    labels = [f'{s:0.1f}% {l}' for l, s in zip(categories, fraction)]
+    explode = [0.01 for i in range(len(labels))]
+    colors_list = ["#B91D2D", "#F5921D", "#27317E", "#28AAE1", "#B5D4EF",
+                   "#006838", "#39B54A", "#F9ED32", "#68499E", "#BA89F9",
+                   "#949597"]
+    plt.axis("equal")
+    plt.pie(fraction, explode=explode, colors=colors_list)
+
+    # draw circle
+    centre_circle = plt.Circle((0, 0), 0.70, fc='white')
+    fig = plt.gcf()
+    fig.gca().add_artist(centre_circle)
+
+    # Equal aspect ratio ensures that pie is drawn as a circle
+    plt.tight_layout()
+
+    plt.legend(labels=labels, loc="center")
+    plt.title(f"Profanities Themes Diversion:\nAll Artists All Times", pad=-30)
+    plt.show()
+    return sorted_themes_diversion
+
+
+
 
 if __name__ == '__main__':
     d = create_top_n_themes_dict(categories_dict, 10)
