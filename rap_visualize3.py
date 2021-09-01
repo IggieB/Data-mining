@@ -290,9 +290,11 @@ def theme_frequency_in_group(jsons_list, field, group_name, group_words, theme,
 def theme_group_diversion_pie_chart(percentage, group_name, theme_name):
     plt.style.use("fivethirtyeight")
 
-    categories = [f"songs containing\n{theme_name} profanities", f"songs without\n{theme_name} profanities"]  # profs themes
-    fraction = [percentage, 100-percentage]  # profs themes percentage
-    plt.title(f"How much of the songs written by {group_name} rappers\nuse {theme_name} profanities")
+    categories = [f"songs containing\n{theme_name} profanities",
+                  f"songs without\n{theme_name} profanities"]  # profs themes
+    fraction = [percentage, 100 - percentage]  # profs themes percentage
+    plt.title(
+        f"How much of the songs written by {group_name} rappers\nuse {theme_name} profanities")
     plt.axis("equal")
     plt.pie(fraction, labels=categories, autopct='%1.1f%%')
     plt.show()
@@ -389,25 +391,42 @@ anti_native = "abbo, abo, boong, boonga, squaw"
 
 # UNITED CATEGORIES
 CONNECT = ", "
-dick_and_sperm = dick + CONNECT + sperm
-pussy_and_breasts = pussy + CONNECT + breasts
+male_anatomy = dick + CONNECT + sperm
+female_anatomy = pussy + CONNECT + breasts
+non_black = anti_asian + CONNECT + antisemitic + CONNECT + islamophobic + CONNECT + anti_white + CONNECT + anti_latin + CONNECT + anti_roma + CONNECT + anti_native
+sex_united = sex + CONNECT + sperm + CONNECT + masturbation
+united_prof_themes_dict = {"Female Anatomy": female_anatomy,
+                           "Male Anatomy": male_anatomy,
+                           "Ass related": ass,
+                           "Feecees related": feecees,
+                           "Sex related": sex_united,
+                           "Black related": black,
+                           "Mysogynistic": mysogynistic,
+                           "LGBT": lgbt_phobic,
+                           "Drugs related": drugs,
+                           "Non-Black Slurs": non_black
+                           }
 
 categories_dict = {"ass related": ass,
                    "feecees related": feecees,
                    "sex related": sex,
                    "dick related": dick,
+
+                   # female anatomy
                    "pussy related": pussy,
                    "breasts related": breasts,
+
                    "black related": black,
                    "mysogynistic": mysogynistic,
                    "LGBT": lgbt_phobic,
                    "masturbation": masturbation,
                    "sperm": sperm,
+                   "drugs related": drugs,
+                    ###
                    "anti asian": anti_asian,
                    "antisemitic": antisemitic,
                    "islamophobic": islamophobic,
                    "anti white": anti_white,
-                   "drugs related": drugs,
                    "anti latin": anti_latin,
                    "anti roma": anti_roma,
                    "anti native": anti_native,
@@ -519,7 +538,9 @@ def follow_profanity_type(jsons_list, profanities):
 
 if __name__ == '__main__':
     all_genders = {"males": ["Male"], "females": ["Female"]}
-    profs_themes = create_top_n_themes_dict(categories_dict, len(categories_dict.keys()))
+    profs_themes = create_top_n_themes_dict(categories_dict,
+                                            len(categories_dict.keys()))
+    united_prof_themes = create_top_n_themes_dict(united_prof_themes_dict, len(united_prof_themes_dict.keys()))
     # GROUPS COMPARISON
 
     # 1: Show the top profanity of each gender's rappers and it's frequency
@@ -707,4 +728,3 @@ if __name__ == '__main__':
     plt.ylabel('Percentage of Profanities')
     plt.legend()
     plt.show()
-
